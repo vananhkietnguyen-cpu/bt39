@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tính Chỉ Số BMI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .bmi-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    /* Phần kết quả */
+    .result {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background-color: #f8f9fa;
+      text-align: center;
+      display: none; /* Mẩn đi khi chưa tính */
+    }
+
+    .result p {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .classification {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bmi-card">
+    <h2>Tính Chỉ Số BMI</h2>
+    
+    <div class="input-group">
+      <label for="weight">Cân nặng (kg):</label>
+      <input type="number" id="weight" step="0.1" placeholder="Ví dụ: 60">
+    </div>
+
+    <div class="input-group">
+      <label for="height">Chiều cao (m):</label>
+      <input type="number" id="height" step="0.01" placeholder="Ví dụ: 1.75">
+    </div>
+
+    <button onclick="calculateBMI()">Tính BMI</button>
+
+    <div id="resultBox" class="result">
+      <p>BMI của bạn: <span id="bmiValue" style="font-weight: bold;"></span></p>
+      <p>Phân loại: <span id="bmiCategory" class="classification"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateBMI() {
+      const weightInput = document.getElementById('weight').value;
+      const heightInput = document.getElementById('height').value;
+      const resultBox = document.getElementById('resultBox');
+      const bmiValueSpan = document.getElementById('bmiValue');
+      const bmiCategorySpan = document.getElementById('bmiCategory');
+
+      // Kiểm tra xem người dùng đã nhập đủ dữ liệu chưa
+      if (!weightInput || !heightInput) {
+        alert('Vui lòng nhập đầy đủ cân nặng và chiều cao!');
+        return;
+      }
+
+      const weight = parseFloat(weightInput);
+      const height = parseFloat(heightInput);
+
+      if (weight <= 0 || height <= 0) {
+        alert('Cân nặng và chiều cao phải lớn hơn 0!');
+        return;
+      }
+
+      // Công thức tính BMI: Cân nặng / (Chiều cao * Chiều cao)
+      const bmi = weight / (height * height);
+      const roundedBmi = bmi.toFixed(1); // Làm tròn 1 chữ số thập phân
+
+      let category = '';
+      let color = '';
+
+      // Phân loại chỉ số BMI tiêu chuẩn
+      if (bmi < 18.5) {
+        category = 'Thiếu cân';
+        color = '#17a2b8'; // Xanh dương nhạt
+      } else if (bmi >= 18.5 && bmi < 25) {
+        category = 'Bình thường';
+        color = '#28a745'; // Xanh lá
+      } else {
+        category = 'Thừa cân';
+        color = '#dc3545'; // Đỏ
+      }
+
+      // Hiển thị kết quả lên giao diện
+      bmiValueSpan.innerText = roundedBmi;
+      bmiCategorySpan.innerText = category;
+      bmiCategorySpan.style.color = color;
+      
+      resultBox.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

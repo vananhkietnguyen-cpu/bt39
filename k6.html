@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Di chuyển khối div bằng phím mũi tên</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden; /* Ngăn không cho cuộn trang khi bấm phím */
+    }
+
+    /* Vùng chứa (Khu vực di chuyển của khối) */
+    .arena {
+      width: 500px;
+      height: 400px;
+      border: 2px dashed #ccc;
+      position: relative;
+      background-color: #fff;
+      border-radius: 8px;
+    }
+
+    /* Khối div cần dịch chuyển */
+    #myBox {
+      width: 60px;
+      height: 60px;
+      background-color: #007bff;
+      position: absolute;
+      top: 170px; /* Vị trí ban đầu ở giữa theo chiều dọc */
+      left: 220px; /* Vị trí ban đầu ở giữa theo chiều ngang */
+      border-radius: 8px;
+      transition: top 0.05s linear; /* Tạo độ mượt khi dịch chuyển */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="arena">
+    <div id="myBox"></div>
+  </div>
+
+  <script>
+    const box = document.getElementById('myBox');
+    
+    // Lưu tọa độ top hiện tại của khối (lấy giá trị từ CSS)
+    let currentTop = 170; 
+    const step = 15; // Số pixel dịch chuyển mỗi lần bấm phím
+
+    // Lắng nghe sự kiện keydown trên toàn bộ trang web
+    window.addEventListener('keydown', (event) => {
+      // Ngăn hành vi mặc định của phím mũi tên (tránh việc trang bị cuộn lên/xuống)
+      if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+        event.preventDefault();
+      }
+
+      if (event.key === 'ArrowUp') {
+        // Dịch chuyển lên trên (giảm giá trị top)
+        currentTop -= step;
+        
+        // Giới hạn không cho khối chạy ra ngoài khung phía trên (0px)
+        if (currentTop < 0) {
+          currentTop = 0;
+        }
+      } 
+      else if (event.key === 'ArrowDown') {
+        // Dịch chuyển xuống dưới (tăng giá trị top)
+        currentTop += step;
+        
+        // Giới hạn không cho khối chạy ra ngoài khung phía dưới 
+        // (Chiều cao khung 400px - Chiều cao khối 60px = 340px)
+        const maxTop = 400 - box.offsetHeight;
+        if (currentTop > maxTop) {
+          currentTop = maxTop;
+        }
+      }
+
+      // Cập nhật vị trí mới cho khối div
+      box.style.top = currentTop + 'px';
+    });
+  </script>
+
+</body>
+</html>

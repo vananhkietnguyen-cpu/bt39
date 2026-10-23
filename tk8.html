@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chuyển đổi HEX sang RGB</title>
+</head>
+<body>
+    <h2>Chuyển đổi mã màu HEX sang RGB</h2>
+
+    <label>Nhập mã màu HEX:</label>
+    <input type="text" id="hex" placeholder="#FF0000">
+
+    <button onclick="chuyenDoi()">Chuyển đổi</button>
+
+    <p id="ketqua"></p>
+    <div id="hienthi" style="width:200px; height:100px;"></div>
+
+    <script>
+        function hexToRGB(hex) {
+            // Xóa dấu # nếu có
+            hex = hex.replace("#", "");
+
+            // Kiểm tra mã HEX gồm 6 ký tự
+            if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
+                return "Mã màu HEX không hợp lệ!";
+            }
+
+            // Chuyển HEX sang số thập phân
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
+
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function chuyenDoi() {
+            let hex = document.getElementById("hex").value.trim();
+            let rgb = hexToRGB(hex);
+
+            document.getElementById("ketqua").innerText =
+                "Kết quả: " + rgb;
+
+            if (rgb.startsWith("rgb(")) {
+                document.getElementById("hienthi").style.backgroundColor = rgb;
+            } else {
+                document.getElementById("hienthi").style.backgroundColor = "transparent";
+            }
+        }
+    </script>
+</body>
+</html>

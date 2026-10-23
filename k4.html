@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ví dụ Phân Trang (Pagination)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    /* Danh sách mục */
+    #item-list {
+      list-style: none;
+      padding: 0;
+      min-height: 280px; /* Giữ khung cố định để không bị giật trang */
+      margin-bottom: 20px;
+    }
+
+    #item-list li {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+      color: #555;
+    }
+
+    #item-list li:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    /* Khu vực nút phân trang */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .pagination button:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Nút trang hiện tại */
+    .pagination button.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Danh sách 50 mục</h2>
+    
+    <!-- Danh sách dữ liệu -->
+    <ul id="item-list"></ul>
+
+    <!-- Nút phân trang -->
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <script>
+    // 1. Tạo mảng dữ liệu giả lập gồm 50 mục
+    const items = Array.from({ length: 50 }, (_, index) => `Mục số ${index + 1}`);
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+
+    const listElement = document.getElementById('item-list');
+    const paginationElement = document.getElementById('pagination');
+
+    // 2. Hàm hiển thị danh sách mục theo trang hiện tại
+    function displayList(itemsArray, wrapper, rowsPerPage, page) {
+      wrapper.innerHTML = "";
+      page--; // Chuyển về index mảng (bắt đầu từ 0)
+
+      const start = rowsPerPage * page;
+      const end = start + rowsPerPage;
+      const paginatedItems = itemsArray.slice(start, end);
+
+      // Thêm các mục của trang đó vào HTML
+      for (let i = 0; i < paginatedItems.length; i++) {
+        const item = paginatedItems[i];
+        const li = document.createElement('li');
+        li.innerText = item;
+        wrapper.appendChild(li);
+      }
+    }
+
+    // 3. Hàm tạo các nút phân trang
+    function setupPagination(itemsArray, wrapper, rowsPerPage) {
+      wrapper.innerHTML = "";
+      const pageCount = Math.ceil(itemsArray.length / rowsPerPage);
+
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = paginationButton(i, itemsArray);
+        wrapper.appendChild(btn);
+      }
+    }
+
+    // 4. Hàm cấu hình sự kiện cho từng nút phân trang
+    function paginationButton(page, itemsArray) {
+      const button = document.createElement('button');
+      button.innerText = page;
+
+      if (currentPage === page) button.classList.add('active');
+
+      button.addEventListener('click', function () {
+        currentPage = page;
+        displayList(itemsArray, listElement, itemsPerPage, currentPage);
+
+        // Cập nhật lại trạng thái active cho nút được bấm
+        let currentBtn = document.querySelector('.pagination button.active');
+        if (currentBtn) {
+          currentBtn.classList.remove('active');
+        }
+        button.classList.add('active');
+      });
+
+      return button;
+    }
+
+    // Khởi chạy lần đầu khi tải trang
+    displayList(items, listElement, itemsPerPage, currentPage);
+    setupPagination(items, paginationElement, itemsPerPage);
+  </script>
+
+</body>
+</html>

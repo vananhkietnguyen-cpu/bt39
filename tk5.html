@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    /* Container của Accordion */
+    .accordion-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .accordion-item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    /* Nút/Tiêu đề Accordion */
+    .accordion-header {
+      width: 100%;
+      padding: 16px;
+      background-color: #ffffff;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .accordion-header:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Biểu tượng mũi tên */
+    .icon {
+      transition: transform 0.3s ease;
+    }
+
+    /* Nội dung Accordion (Ẩn mặc định) */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+      padding: 0 16px;
+    }
+
+    .accordion-content p {
+      padding: 12px 0;
+      margin: 0;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Khi kích hoạt (Active) */
+    .accordion-item.active .accordion-header {
+      background-color: #e8f0fe;
+      color: #1a73e8;
+    }
+
+    .accordion-item.active .icon {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="accordion-container">
+    <!-- Mục 1 -->
+    <div class="accordion-item">
+      <button class="accordion-header">
+        Tiêu đề 1: Accordion là gì?
+        <span class="icon">▼</span>
+      </button>
+      <div class="accordion-content">
+        <p>Accordion là một thành phần giao diện người dùng giúp ẩn/hiện nội dung khi bấm vào tiêu đề, tiết kiệm không gian hiển thị.</p>
+      </div>
+    </div>
+
+    <!-- Mục 2 -->
+    <div class="accordion-item">
+      <button class="accordion-header">
+        Tiêu đề 2: Cách thức hoạt động
+        <span class="icon">▼</span>
+      </button>
+      <div class="accordion-content">
+        <p>JavaScript sẽ lấy chiều cao thực tế của nội dung (`scrollHeight`) và cập nhật thuộc tính `max-height` của CSS để tạo hiệu ứng trượt.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Lấy tất cả các thẻ tiêu đề
+    const headers = document.querySelectorAll('.accordion-header');
+
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const item = header.parentElement;
+        const content = item.querySelector('.accordion-content');
+
+        // Bật/tắt class active
+        item.classList.toggle('active');
+
+        // Xử lý đóng/mở nội dung dựa vào max-height
+        if (item.classList.contains('active')) {
+          // Gán max-height bằng đúng chiều cao nội dung bên trong
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          // Thu hồi lại về 0
+          content.style.maxHeight = null;
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
